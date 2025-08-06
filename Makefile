@@ -3,7 +3,7 @@ SHELL := /bin/bash
 PATH := ${GOPATH}/bin:$(PATH):/usr/local/go/bin/
 ENV := env
 VERSION := 3.9.7
-PYTHON := python$$(echo ${VERSION} | cut -d. -f1,2)
+PYTHON := $(shell echo python$$(echo ${VERSION} | cut -d. -f1,2))
 PYTHON_PROJECTS := cbagent perfdaily perfrunner scripts spring
 .PHONY: docker
 
@@ -16,7 +16,7 @@ all:
 	virtualenv --quiet --python ${PYTHON} ${ENV}
 	${ENV}/bin/pip install --upgrade --quiet pip wheel
 	${ENV}/bin/pip install --quiet --no-warn-script-location -r requirements.txt
-	${ENV}/bin/python -m pip install --quiet .
+	${ENV}/bin/python -m pip install --quiet -e .
 	pwd > ${ENV}/lib/${PYTHON}/site-packages/perfrunner.pth
 
 clean:
